@@ -4,7 +4,6 @@ import com.yflash.tech.SampleAPI.common.CommonConstants;
 import com.yflash.tech.SampleAPI.entity.UserEntity;
 import com.yflash.tech.SampleAPI.exception.DetailsNotFoundException;
 import com.yflash.tech.SampleAPI.exception.ProcessingException;
-import com.yflash.tech.SampleAPI.model.in.DeleteUserRequest;
 import com.yflash.tech.SampleAPI.model.in.PostUserRequest;
 import com.yflash.tech.SampleAPI.model.in.PutUserRequest;
 import com.yflash.tech.SampleAPI.model.out.User;
@@ -18,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;@Service
+import java.util.Optional;
+
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
