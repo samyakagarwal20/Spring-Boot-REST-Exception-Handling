@@ -1,10 +1,14 @@
 package com.yflash.tech.SampleAPI.controller;
 
 import com.yflash.tech.SampleAPI.entity.UserEntity;
+import com.yflash.tech.SampleAPI.exception.BadRequestException;
+import com.yflash.tech.SampleAPI.exception.DetailsNotFoundException;
+import com.yflash.tech.SampleAPI.exception.ProcessingException;
 import com.yflash.tech.SampleAPI.model.in.DeleteUserRequest;
 import com.yflash.tech.SampleAPI.model.in.GetUserRequest;
 import com.yflash.tech.SampleAPI.model.in.PostUserRequest;
 import com.yflash.tech.SampleAPI.model.in.PutUserRequest;
+import com.yflash.tech.SampleAPI.model.out.ErrorResponseDto;
 import com.yflash.tech.SampleAPI.model.out.User;
 import com.yflash.tech.SampleAPI.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -51,6 +55,21 @@ public class UserController {
         if(serviceResponse == null)
             return new ResponseEntity<>("Data doesn't exists for this id", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>("Data for id " + serviceResponse + " is deleted successfully!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(BadRequestException exception) {
+        return new ResponseEntity<>(new ErrorResponseDto(exception.getMessage(), exception.getErrorCode(), exception.getErrorMessages()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DetailsNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(DetailsNotFoundException exception) {
+        return new ResponseEntity<>(new ErrorResponseDto(exception.getMessage(), exception.getErrorCode(), exception.getErrorMessages()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProcessingException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(ProcessingException exception) {
+        return new ResponseEntity<>(new ErrorResponseDto(exception.getMessage(), exception.getErrorCode(), exception.getErrorMessages()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
