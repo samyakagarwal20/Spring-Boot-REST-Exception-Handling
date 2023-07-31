@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-public class UserController extends RootController{
+public class UserController {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -55,6 +55,21 @@ public class UserController extends RootController{
         if(serviceResponse == null)
             return new ResponseEntity<>("Data doesn't exists for this id", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>("Data for id " + serviceResponse + " is deleted successfully!", HttpStatus.OK);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(BadRequestException exception) {
+        return new ResponseEntity<>(new ErrorResponseDto(exception.getMessage(), exception.getErrorCode(), exception.getErrorMessages()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DetailsNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(DetailsNotFoundException exception) {
+        return new ResponseEntity<>(new ErrorResponseDto(exception.getMessage(), exception.getErrorCode(), exception.getErrorMessages()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProcessingException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(ProcessingException exception) {
+        return new ResponseEntity<>(new ErrorResponseDto(exception.getMessage(), exception.getErrorCode(), exception.getErrorMessages()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
